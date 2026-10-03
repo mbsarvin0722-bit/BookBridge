@@ -1,0 +1,38 @@
+name: Unzip Archive
+on:
+  push:
+    paths:
+      - '**/*.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Unzip all zip files recursively
+        run: |
+          # پیدا کردن تمام فایل‌های زیپ در تمام پوشه‌ها
+          find . -name "*.zip" -type f | while read file; do
+            echo "Extracting $file..."
+            # استخراج در همان مسیری که فایل زیپ قرار دارد
+            unzip -o "$file" -d "$(dirname "$file")"
+            # حذف فایل زیپ بعد از استخراج
+            rm "$file"
+          done
+          
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Extract zip archive"
+            git push
+          fi
