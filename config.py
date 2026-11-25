@@ -10,6 +10,7 @@ WEBHOOK_PATH = os.getenv("WEBHOOK_PATH", "/telegram/webhook")
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "")
 PORT = int(os.getenv("PORT", "10000"))
 LISTEN = os.getenv("LISTEN", "0.0.0.0")
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 if not BOT_TOKEN:
     logger.critical("BOT_TOKEN تنظیم نشده است. برنامه متوقف می‌شود.")
